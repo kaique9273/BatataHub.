@@ -3,7 +3,7 @@
 -- 🔧 Auto Update + Checagem de WindUI + GitHub
 -- ================================================
 
-local mainScriptURL = "https://raw.githubusercontent.com/kaique9273/BatataHub/main/BatataHub.lua"
+local mainScriptURL = "https://raw.githubusercontent.com/kaique9273/BatataHub./refs/heads/main/Batata01.lua"
 local loaderVersion = "3.2"
 
 -- Função de notificação
@@ -70,3 +70,4 @@ else
     warn("❌ Falha ao baixar script remoto!")
     notify("❌ BatataHub","Erro ao baixar script. Verifique sua conexão ou GitHub.",6)
 end
+
