@@ -33,9 +33,9 @@ if not windSuccess or not WindUI then
     return
 end
 
--- 2️⃣ Baixa script principal do GitHub
+-- 2️⃣ Baixa script principal do GitHub (corrigido: sem espaço extra)
 local success,response = pcall(function()
-    return game:HttpGet(mainScriptURL.." ?t="..tick(),true)
+    return game:HttpGet(mainScriptURL .. "?t=" .. tick(), true)
 end)
 
 if success and response then
