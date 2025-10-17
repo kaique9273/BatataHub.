@@ -1,21 +1,40 @@
+--#version: 3.1
+-- ================================================
+-- 🌟 Batata Hub v1.0 | Criador: Lk (coringakaio)
+-- Totalmente compatível com Delta, Fluxus e Codex
+-- ================================================
+
+-- 🔔 Função de notificação (console + tela)
+local function notify(title, text, duration)
+    -- Console
+    print("[🔹 " .. title .. "] " .. text)
+    -- Notificação visual
+    pcall(function()
+        game:GetService("StarterGui"):SetCore("SendNotification", {
+            Title = title,
+            Text = text,
+            Duration = duration or 6
+        })
+    end)
+end
+
 -- Carrega WindUI
--- Loader BatataHub v1.0 (Delta Executor)
+local success, WindUI = pcall(function()
+    return loadstring(game:HttpGet("https://github.com/Footagesus/WindUI/releases/latest/download/main.lua", true))()
+end)
 
--- URL raw do seu BatataHub.lua no GitHub
-local url = "https://raw.githubusercontent.com/kaique9273/BatataHub/main/BatataHub.lua"
-
--- Baixa sempre a versão mais recente
-local code = game:HttpGet(url .. "?time=" .. tick(), true)
-
--- Executa o script
-loadstring(https://raw.githubusercontent.com/kaique9273/BatataHub/main/BatataHub.lua)()
+if not success then
+    warn("[BatataHub] ❌ Falha ao carregar WindUI.")
+    notify("❌ Erro", "Falha ao carregar WindUI.", 6)
+    return
+end
 
 -- Cria janela principal
 local Window = WindUI:CreateWindow({
     Title = "Batata Hub v1.0",
     Icon = "door-open",
     Author = "Owner Lk",
-    Folder = "EM BREVE",
+    Folder = "BatataHub",
     Size = UDim2.fromOffset(580, 520),
     MinSize = Vector2.new(560, 400),
     MaxSize = Vector2.new(850, 600),
@@ -24,72 +43,63 @@ local Window = WindUI:CreateWindow({
     Resizable = true,
     SideBarWidth = 200,
     BackgroundImageTransparency = 0.42,
-    HideSearchBar = true,
-    ScrollBarEnabled = false,
+    HideSearchBar = false,
+    ScrollBarEnabled = true,
     User = {
         Enabled = true,
         Anonymous = false,
         Callback = function()
-            print("User button clicked")
+            print("[BatataHub] Botão de usuário clicado.")
         end,
     },
 })
 
---==========================================
--- 🌟 ABA DE INFORMAÇÕES - BATATA HUB
---==========================================
+-- Notificação e log inicial
+notify("✅ BatataHub", "Painel carregado com sucesso!\nVersão 1.0 - Criador: Lk", 6)
+
+-- ================================================
+-- 📘 ABA DE INFORMAÇÕES
+-- ================================================
 local InfoTab = Window:Tab({
     Title = "Informações",
     Icon = "info",
     Locked = false,
 })
 
--- Criador
-InfoTab:Paragraph({Title = "👤 Criador 💻 Nome: Lk"})
-InfoTab:Paragraph({Title = "Discord 💬 coringakaio"})
+InfoTab:Paragraph({Title = "👤 Criador: Lk"})
+InfoTab:Paragraph({Title = "💬 Discord: coringakaio"})
+InfoTab:Paragraph({Title = "📦 Versão: 1.0"})
+InfoTab:Paragraph({Title = "📌 Script Batata Hub totalmente customizado"})
+InfoTab:Paragraph({Title = "✨ Funcionalidades:\n- Speed ajustável\n- Super Jump\n- Noclip\n- Estilo Moderno (Drip)"})
+InfoTab:Paragraph({Title = "⚙️ Compatível com:\n- Delta\n- Fluxus\n- Codex"})
+InfoTab:Paragraph({Title = "💡 Dica: use com cuidado e divirta-se!"})
 
--- Script
-InfoTab:Paragraph({Title = "📌 Script Batata Hub v1.0"})
-
--- Funcionalidades
-InfoTab:Paragraph({Title = "✨ Funcionalidades"})
-InfoTab:Paragraph({Title = "Fly Gui Em Construção..."})
-InfoTab:Paragraph({Title = "Speed ajustável"})
-InfoTab:Paragraph({Title = "Super Jump"})
-InfoTab:Paragraph({Title = "Trolls (EM DESENVOLVIMENTO 💻)"})
-
--- Compatibilidade
-InfoTab:Paragraph({Title = "⚙️ Compatibilidade Delta\n- Fluxus\n- Codex"})
-
--- Estilo e aviso
-InfoTab:Paragraph({Title = "📌 Estilo Moderno (Drip Style)"})
-InfoTab:Paragraph({Title = "💡 Aviso Use com cuidado e divirta-se!"})
-
--- Botões
 InfoTab:Button({
     Title = "📋 Copiar Discord",
     Callback = function()
         if setclipboard then
             setclipboard("coringakaio")
-            print("Discord copiado!")
+            notify("📋 Copiado", "Seu Discord foi copiado!", 4)
         else
-            print("Seu executor não suporta copiar texto.")
+            warn("[BatataHub] Seu executor não suporta copiar texto.")
         end
-    end
+    end,
 })
 
 InfoTab:Button({
-    Title = "🔗 Ver Atualizações",
+    Title = "🔗 Copiar Link do Servidor",
     Callback = function()
-        local url = "https://discord.gg/seuservidor"
-        if setclipboard then setclipboard(url) end
-        print("Link de atualizações copiado!")
-    end
+        local link = "https://discord.gg/seuservidor"
+        if setclipboard then
+            setclipboard(link)
+            notify("🔗 Copiado", "Link do servidor copiado!", 4)
+        end
+    end,
 })
 
---==========================================
+-- ================================================
 -- 🧍 ABA PLAYER
---==========================================
+-- ================================================
 local PlayerTab = Window:Tab({
     Title = "Player",
     Icon = "user",
@@ -97,114 +107,108 @@ local PlayerTab = Window:Tab({
 })
 
 PlayerTab:Paragraph({
-    Title = "Controle seu personagem",
-    Content = "Use os toggles e sliders para controlar Speed e Jump."
+    Title = "🎮 Controle seu personagem",
+    Content = "Use os sliders para ajustar Speed e Jump em tempo real."
 })
 
---====================
--- PLAYER CONFIG
---====================
-local speedValue = 70
-local jumpValue = 50
-local speedEnabled = false
-local jumpEnabled = false
-local cfg = {}
-cfg.noclip = false
+-- Configurações iniciais
+local cfg = {
+    speedValue = 70,
+    jumpValue = 50,
+    speedEnabled = false,
+    jumpEnabled = false,
+    noclip = false
+}
 
 local player = game.Players.LocalPlayer
 local char = player.Character or player.CharacterAdded:Wait()
 local humanoid = char:FindFirstChildOfClass("Humanoid") or char:WaitForChild("Humanoid")
 
--- Funções para atualizar
+-- Funções de atualização
 local function updateSpeed()
     if humanoid then
-        humanoid.WalkSpeed = speedEnabled and speedValue or 16 -- valor padrão 16
+        humanoid.WalkSpeed = cfg.speedEnabled and cfg.speedValue or 16
     end
 end
 
 local function updateJump()
     if humanoid then
-        humanoid.JumpPower = jumpEnabled and jumpValue or 50 -- valor padrão 50
+        humanoid.JumpPower = cfg.jumpEnabled and cfg.jumpValue or 50
     end
 end
 
---====================
--- SPEED TOGGLE
---====================
+-- Toggles e Sliders
 PlayerTab:Toggle({
-    Title = "Ativar Speed",
+    Title = "⚡ Ativar Speed",
     Default = false,
     Callback = function(state)
-        speedEnabled = state
+        cfg.speedEnabled = state
         updateSpeed()
-    end
+        notify("⚡ Speed", state and "Speed ativado!" or "Speed desativado.", 4)
+    end,
 })
 
 PlayerTab:Slider({
-    Title = "Speed",
+    Title = "Velocidade",
     Step = 1,
-    Value = {
-        Min = 20,
-        Max = 120,
-        Default = speedValue,
-    },
+    Value = { Min = 20, Max = 120, Default = cfg.speedValue },
     Callback = function(value)
-        speedValue = value
+        cfg.speedValue = value
         updateSpeed()
-    end
+        print("[BatataHub] Velocidade ajustada para: " .. value)
+    end,
 })
 
---====================
--- JUMP TOGGLE
---====================
 PlayerTab:Toggle({
-    Title = "Ativar Super Jump",
+    Title = "🦘 Ativar Super Jump",
     Default = false,
     Callback = function(state)
-        jumpEnabled = state
+        cfg.jumpEnabled = state
         updateJump()
-    end
+        notify("🦘 Super Jump", state and "Ativado!" or "Desativado.", 4)
+    end,
 })
 
 PlayerTab:Slider({
-    Title = "Super Jump",
+    Title = "Força do Pulo",
     Step = 1,
-    Value = {
-        Min = 10,
-        Max = 200,
-        Default = jumpValue,
-    },
+    Value = { Min = 10, Max = 200, Default = cfg.jumpValue },
     Callback = function(value)
-        jumpValue = value
+        cfg.jumpValue = value
         updateJump()
-    end
+        print("[BatataHub] Força do pulo: " .. value)
+    end,
 })
 
-local TabTroll = Window:Tab({
-	Title = "Noclip",
-	icon = "cog",
-	locked = false
+-- ================================================
+-- 🫥 ABA NOCLIP
+-- ================================================
+local TrollTab = Window:Tab({
+    Title = "Noclip",
+    Icon = "ghost",
+    Locked = false,
 })
 
-TabTroll:Toggle({
-	Title = "🫥Ativa Noclip",
-	Default = false,
-	Callback = function(value)
-	      cfg.noclip = value
-	       print("Noclip Agr Esta", value)
-	end
+TrollTab:Toggle({
+    Title = "🫥 Ativar Noclip",
+    Default = false,
+    Callback = function(value)
+        cfg.noclip = value
+        notify("🫥 Noclip", value and "Noclip ativado!" or "Noclip desativado.", 4)
+        print("[BatataHub] Noclip está:", value)
+    end,
 })
 
 game:GetService("RunService").Stepped:Connect(function()
-    if cfg.noclip and game.Players.LocalPlayer.Character then
-        for _, part in ipairs(game.Players.LocalPlayer.Character:GetDescendants()) do
+    if cfg.noclip and player.Character then
+        for _, part in ipairs(player.Character:GetDescendants()) do
             if part:IsA("BasePart") then
                 part.CanCollide = false
             end
         end
     end
+end)
 
-end) 
-
-
-
+-- ================================================
+print("[✅ BatataHub] Carregado com sucesso! Última atualização: " .. os.date("%d/%m/%Y %H:%M:%S"))
+notify("✅ BatataHub", "Carregado com sucesso!\nData: " .. os.date("%d/%m/%Y %H:%M:%S"), 6)
