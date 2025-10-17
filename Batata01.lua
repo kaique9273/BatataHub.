@@ -143,12 +143,12 @@ local RunService = game:GetService("RunService")
 local lp = Players.LocalPlayer
 local noclipEnabled = false
 
--- Pega o personagem atual ou espera ele carregar
+-- Função para pegar personagem
 local function getCharacter()
     return lp.Character or lp.CharacterAdded:Wait()
 end
 
--- Função para atualizar colisão do personagem
+-- Função para atualizar colisão
 local function updateNoclip()
     local character = getCharacter()
     for _, part in pairs(character:GetDescendants()) do
@@ -158,7 +158,12 @@ local function updateNoclip()
     end
 end
 
--- Exemplo de toggle com WindUI (substitua 'TrollTab' pelo seu Tab real)
+-- Conecta quando o personagem muda (para evitar partes faltando)
+lp.CharacterAdded:Connect(function()
+    updateNoclip()
+end)
+
+-- Toggle do WindUI
 TrollTab:Toggle({
     Title = "🫥 Ativar Noclip",
     Default = false,
@@ -184,7 +189,7 @@ TrollTab:Toggle({
     end
 })
 
--- Mantém noclip ativo no Stepped
+-- Mantém noclip ativo no Stepped somente quando ligado
 RunService.Stepped:Connect(function()
     if noclipEnabled then
         local character = getCharacter()
@@ -199,6 +204,7 @@ end)
 -- ================================================
 -- Exibe versão carregada no console
 print("[✅ BatataHub] v3.2 carregado com sucesso! Última atualização: " .. os.date("%d/%m/%Y %H:%M:%S"))
+
 
 
 
