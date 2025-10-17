@@ -136,21 +136,59 @@ PlayerTab:Slider({
 })
 
 -- ================================================
--- 🫥 Aba Noclip
+-- 🫥 Noclip corrigido
 -- ================================================
-local TrollTab = Window:Tab({Title = "Noclip", Icon = "ghost", Locked = false})
+local Players = game:GetService("Players")
+local RunService = game:GetService("RunService")
+local lp = Players.LocalPlayer
+local noclipEnabled = false
+
+-- Pega o personagem atual ou espera ele carregar
+local function getCharacter()
+    return lp.Character or lp.CharacterAdded:Wait()
+end
+
+-- Função para atualizar colisão do personagem
+local function updateNoclip()
+    local character = getCharacter()
+    for _, part in pairs(character:GetDescendants()) do
+        if part:IsA("BasePart") then
+            part.CanCollide = not noclipEnabled
+        end
+    end
+end
+
+-- Exemplo de toggle com WindUI (substitua 'TrollTab' pelo seu Tab real)
 TrollTab:Toggle({
     Title = "🫥 Ativar Noclip",
     Default = false,
-    Callback = function(value)
-        cfg.noclip = value
-        print("[BatataHub] Noclip está:", value)
+    Callback = function(state)
+        noclipEnabled = state
+        updateNoclip()
+        
+        if noclipEnabled then
+            WindUI:Notify({
+                Title = "Noclip Ativado",
+                Content = "Você pode atravessar paredes!",
+                Duration = 3,
+                Icon = "ghost"
+            })
+        else
+            WindUI:Notify({
+                Title = "Noclip Desativado",
+                Content = "Colisão restaurada!",
+                Duration = 3,
+                Icon = "ghost"
+            })
+        end
     end
 })
 
-game:GetService("RunService").Stepped:Connect(function()
-    if cfg.noclip and player.Character then
-        for _, part in ipairs(player.Character:GetDescendants()) do
+-- Mantém noclip ativo no Stepped
+RunService.Stepped:Connect(function()
+    if noclipEnabled then
+        local character = getCharacter()
+        for _, part in pairs(character:GetDescendants()) do
             if part:IsA("BasePart") then
                 part.CanCollide = false
             end
@@ -161,5 +199,6 @@ end)
 -- ================================================
 -- Exibe versão carregada no console
 print("[✅ BatataHub] v3.2 carregado com sucesso! Última atualização: " .. os.date("%d/%m/%Y %H:%M:%S"))
+
 
 
