@@ -1,3 +1,7 @@
+-- ==============================
+-- Batata Hub v1.0
+-- ==============================
+
 -- Carrega WindUI
 local WindUI = loadstring(game:HttpGet("https://github.com/Footagesus/WindUI/releases/latest/download/main.lua", true))()
 
@@ -26,33 +30,24 @@ local Window = WindUI:CreateWindow({
     },
 })
 
---==========================================
--- 🌟 ABA DE INFORMAÇÕES - BATATA HUB
---==========================================
+-- ==============================
+-- ABA DE INFORMAÇÕES
+-- ==============================
 local InfoTab = Window:Tab({
     Title = "Informações",
     Icon = "info",
     Locked = false,
 })
 
--- Criador
 InfoTab:Paragraph({Title = "👤 Criador 💻 Nome: Lk"})
 InfoTab:Paragraph({Title = "Discord 💬 coringakaio"})
-
--- Script
 InfoTab:Paragraph({Title = "📌 Script Batata Hub v1.0"})
-
--- Funcionalidades
 InfoTab:Paragraph({Title = "✨ Funcionalidades"})
 InfoTab:Paragraph({Title = "Fly Gui Em Construção..."})
 InfoTab:Paragraph({Title = "Speed ajustável"})
 InfoTab:Paragraph({Title = "Super Jump"})
 InfoTab:Paragraph({Title = "Trolls (EM DESENVOLVIMENTO 💻)"})
-
--- Compatibilidade
 InfoTab:Paragraph({Title = "⚙️ Compatibilidade Delta\n- Fluxus\n- Codex"})
-
--- Estilo e aviso
 InfoTab:Paragraph({Title = "📌 Estilo Moderno (Drip Style)"})
 InfoTab:Paragraph({Title = "💡 Aviso Use com cuidado e divirta-se!"})
 
@@ -78,9 +73,9 @@ InfoTab:Button({
     end
 })
 
---==========================================
--- 🧍 ABA PLAYER
---==========================================
+-- ==============================
+-- ABA PLAYER
+-- ==============================
 local PlayerTab = Window:Tab({
     Title = "Player",
     Icon = "user",
@@ -92,9 +87,7 @@ PlayerTab:Paragraph({
     Content = "Use os toggles e sliders para controlar Speed e Jump."
 })
 
---====================
 -- PLAYER CONFIG
---====================
 local speedValue = 70
 local jumpValue = 50
 local speedEnabled = false
@@ -106,22 +99,19 @@ local player = game.Players.LocalPlayer
 local char = player.Character or player.CharacterAdded:Wait()
 local humanoid = char:FindFirstChildOfClass("Humanoid") or char:WaitForChild("Humanoid")
 
--- Funções para atualizar
 local function updateSpeed()
     if humanoid then
-        humanoid.WalkSpeed = speedEnabled and speedValue or 16 -- valor padrão 16
+        humanoid.WalkSpeed = speedEnabled and speedValue or 16
     end
 end
 
 local function updateJump()
     if humanoid then
-        humanoid.JumpPower = jumpEnabled and jumpValue or 50 -- valor padrão 50
+        humanoid.JumpPower = jumpEnabled and jumpValue or 50
     end
 end
 
---====================
--- SPEED TOGGLE
---====================
+-- SPEED
 PlayerTab:Toggle({
     Title = "Ativar Speed",
     Default = false,
@@ -145,9 +135,7 @@ PlayerTab:Slider({
     end
 })
 
---====================
--- JUMP TOGGLE
---====================
+-- JUMP
 PlayerTab:Toggle({
     Title = "Ativar Super Jump",
     Default = false,
@@ -171,19 +159,22 @@ PlayerTab:Slider({
     end
 })
 
-local TabTroll = Window:Tab({
-	Title = "Noclip",
-	icon = "cog",
-	locked = false
+-- ==============================
+-- ABA NOCLIP
+-- ==============================
+local NoclipTab = Window:Tab({
+    Title = "Noclip",
+    Icon = "star",
+    Locked = false
 })
 
-TabTroll:Toggle({
-	Title = "🫥Ativa Noclip",
-	Default = false,
-	Callback = function(value)
-	      cfg.noclip = value
-	       print("Noclip Agr Esta", value)
-	end
+NoclipTab:Toggle({
+    Title = "Ativa Noclip",
+    Default = false,
+    Callback = function(value)
+        cfg.noclip = value
+        print("Noclip Agr Está", value)
+    end
 })
 
 game:GetService("RunService").Stepped:Connect(function()
@@ -194,4 +185,4 @@ game:GetService("RunService").Stepped:Connect(function()
             end
         end
     end
-end) 
+end)
