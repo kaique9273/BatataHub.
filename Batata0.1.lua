@@ -1,5 +1,14 @@
 -- Carrega WindUI
-local WindUI = loadstring(game:HttpGet("https://github.com/kaique9273/BatataHub..git", true))()
+-- Loader BatataHub v1.0 (Delta Executor)
+
+-- URL raw do seu BatataHub.lua no GitHub
+local url = "https://raw.githubusercontent.com/kaique9273/BatataHub/main/BatataHub.lua"
+
+-- Baixa sempre a versão mais recente
+local code = game:HttpGet(url .. "?time=" .. tick(), true)
+
+-- Executa o script
+loadstring(https://raw.githubusercontent.com/kaique9273/BatataHub/main/BatataHub.lua)()
 
 -- Cria janela principal
 local Window = WindUI:CreateWindow({
@@ -196,3 +205,4 @@ game:GetService("RunService").Stepped:Connect(function()
     end
 
 end) 
+
