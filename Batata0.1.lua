@@ -1,5 +1,5 @@
 -- Carrega WindUI
-local WindUI = loadstring(game:HttpGet("https://github.com/Footagesus/WindUI/releases/latest/download/main.lua", true))()
+local WindUI = loadstring(game:HttpGet("https://github.com/kaique9273/BatataHub..git", true))()
 
 -- Cria janela principal
 local Window = WindUI:CreateWindow({
@@ -194,4 +194,5 @@ game:GetService("RunService").Stepped:Connect(function()
             end
         end
     end
+
 end) 
